@@ -45,6 +45,7 @@ const ChampionsInfoSchema = new mongoose.Schema({
   Title: String,
   latestChampion: String,
   Last_Update: String,
+  Roles: String,
 });
 
 const ChampionsInfo = mongoose.model("championsInfo", ChampionsInfoSchema);

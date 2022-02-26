@@ -5,10 +5,9 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const https = require("https");
 const path = require("path");
-const fs = require("fs/promises");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const { ApolloServer, gql } = require("apollo-server-express");
+const { ApolloServer } = require("apollo-server-express");
 const app = express();
 const port = process.env.PORT || 3001;
 require("dotenv").config();
@@ -20,6 +19,8 @@ console.log(process.env.DB_USERNAME);
 mongoose.connect(
   `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.esoz4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
 );
+
+// Staring apollo server
 let apolloServer = null;
 async function startServer() {
   apolloServer = new ApolloServer({
@@ -31,6 +32,9 @@ async function startServer() {
 }
 startServer();
 
+// api.getChampionsInfo();
+
+// Using static files and cors
 app.use(express.static(path.resolve(__dirname, "..", "client", "build")));
 app.use(cors());
 
@@ -39,6 +43,7 @@ const dbConnection = mongoose.connection;
 dbConnection.on("error", (err) => console.log(`Connection Error: ${err}`));
 dbConnection.once("open", () => console.log("Connected to DataBase"));
 
+// Getting amount of online players and sending it
 app.get("/onlinePlayers", async (request, response) => {
   let data = "";
 
@@ -65,20 +70,14 @@ app.get("/onlinePlayers", async (request, response) => {
       .innerHTML
   );
 });
-app.get("/api/:method/:info1?/:info2?/:info3?", async (request, response) => {
-  let apiData = await api.dealWithRequest(
-    request.params.method,
-    request.params.info1,
-    request.params.info2,
-    request.params.info3
-  );
-  response.json(apiData);
-});
+// route for graphql because without this it trying to redirect in client and causing
+// 401 not found error :(
 app.get("/graphql", (req, res) => {
   res.redirect(`https://paladinsdata.herokuapp.com/graphql`);
+  // res.redirect("https://studio.apollographql.com/sandbox/explorer");
 });
 
-// All other GET requests not handled before will return our React app
+// All other requests will return react app
 app.get("/*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "..", "client", "build", "index.html"));
 });

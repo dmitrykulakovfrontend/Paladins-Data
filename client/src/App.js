@@ -8,7 +8,7 @@ import PlayerContent from './pages/PlayerContent';
 import PlayersComparing from './pages/PlayersComparing';
 import NotFound from './pages/NotFound.jsx';
 import { Routes, Route } from 'react-router-dom';
-import CompareView from './pages/CompareView';
+import ChampionsInfo from './pages/ChampionsInfo.jsx';
 
 const App = () => {
   const [width, setwidth] = useState(window.innerWidth);
@@ -37,6 +37,7 @@ const App = () => {
                 path='/randomchampion'
                 element={<RandomChampionWheel width={width} />}
               />
+              <Route path='/champions' element={<ChampionsInfo />} />
               <Route
                 path='/players/:id'
                 element={<PlayerContent width={width} />}

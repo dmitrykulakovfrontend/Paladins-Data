@@ -33,21 +33,10 @@ const MainStatContainer = ({ width, player, isCardView }) => {
         ).toFixed(2)
       : 0;
 
-  const casualTime = (
-    (player.casual.Minutes / (player.casual.Minutes + player.ranked.Minutes)) *
-    100
-  ).toFixed(2);
-
   const winrateBar = normalise(
     player.playerData.Wins,
     0,
     player.playerData.Wins + player.playerData.Losses,
-  );
-
-  const playstyleBar = normalise(
-    player.casual.Minutes,
-    0,
-    player.casual.Minutes + player.ranked.Minutes,
   );
 
   return (
@@ -64,9 +53,9 @@ const MainStatContainer = ({ width, player, isCardView }) => {
                 data={{
                   title1: 'Winrate:',
                   value1: winrate,
-                  title2: 'Wins:',
+                  title2: 'Losses:',
                   value2: player.playerData.Losses,
-                  title3: 'Losses:',
+                  title3: 'Wins:',
                   value3: player.playerData.Wins,
                 }}
                 dataBar={winrateBar}
@@ -84,7 +73,11 @@ const MainStatContainer = ({ width, player, isCardView }) => {
                   firstValue={`${player.playerData.HoursPlayed}h (${Math.round(
                     player.overall.Minutes / 60,
                   )}h)`}
-                  secondTitle={'Amoutf of games:'}
+                  tooltip={{
+                    data: 'In game (In match)',
+                    type: 'info',
+                  }}
+                  secondTitle={'Amount of games:'}
                   secondValue={
                     player.playerData.Wins + player.playerData.Losses
                   }
@@ -104,13 +97,13 @@ const MainStatContainer = ({ width, player, isCardView }) => {
                       ? player.queues.sort(
                           (champ1, champ2) => champ2.Minutes - champ1.Minutes,
                         )[0].Champion +
-                        ' ' +
+                        ' (' +
                         Math.round(
                           player.queues.sort(
                             (champ1, champ2) => champ2.Minutes - champ1.Minutes,
                           )[0].Minutes / 60,
                         ) +
-                        'h'
+                        'h)'
                       : 'None'
                   }
                   secondTitle={'Less playtime champion:'}
@@ -119,13 +112,13 @@ const MainStatContainer = ({ width, player, isCardView }) => {
                       ? player.queues.sort(
                           (champ1, champ2) => champ1.Minutes - champ2.Minutes,
                         )[0].Champion +
-                        ' ' +
+                        ' (' +
                         (
                           player.queues.sort(
                             (champ1, champ2) => champ1.Minutes - champ2.Minutes,
                           )[0].Minutes / 60
                         ).toFixed(2) +
-                        'h'
+                        'h)'
                       : 'None'
                   }
                   margin={{ marginTop: 0 }}
@@ -137,10 +130,11 @@ const MainStatContainer = ({ width, player, isCardView }) => {
                       ? player.queues.sort(
                           (champ1, champ2) => champ2.Deaths - champ1.Deaths,
                         )[0].Champion +
-                        ' ' +
+                        ' (' +
                         player.queues.sort(
                           (champ1, champ2) => champ2.Deaths - champ1.Deaths,
-                        )[0].Deaths
+                        )[0].Deaths +
+                        ')'
                       : 'None'
                   }
                   secondTitle={'Highest kills champion:'}
@@ -149,10 +143,11 @@ const MainStatContainer = ({ width, player, isCardView }) => {
                       ? player.queues.sort(
                           (champ1, champ2) => champ2.Kills - champ1.Kills,
                         )[0].Champion +
-                        ' ' +
+                        ' (' +
                         player.queues.sort(
                           (champ1, champ2) => champ2.Kills - champ1.Kills,
-                        )[0].Kills
+                        )[0].Kills +
+                        ')'
                       : 'None'
                   }
                   margin={{ marginTop: 0 }}
@@ -165,12 +160,13 @@ const MainStatContainer = ({ width, player, isCardView }) => {
                     champWithBestKDA == 'None'
                       ? 'None'
                       : champWithBestKDA.Champion +
-                        ' ' +
+                        ' (' +
                         (
                           (champWithBestKDA.Deaths +
                             0.5 * champWithBestKDA.Assists) /
                           champWithBestKDA.Deaths
-                        ).toFixed(2)
+                        ).toFixed(2) +
+                        ')'
                   }
                   tooltip={{
                     data: 'Counts only 60+ minutes played, if no champions with 60+ minutes then count all',
@@ -181,14 +177,14 @@ const MainStatContainer = ({ width, player, isCardView }) => {
                     champWithBestWinrate == 'None'
                       ? 'None'
                       : champWithBestWinrate.Champion +
-                        ' ' +
+                        ' (' +
                         (
                           (champWithBestWinrate.Wins /
                             (champWithBestWinrate.Wins +
                               champWithBestWinrate.Losses)) *
                           100
                         ).toFixed(2) +
-                        '%'
+                        '%)'
                   }
                   tooltip2={{
                     data: 'Counts only 60+ minutes played, if no champions with 60+ minutes then count all',
@@ -202,17 +198,17 @@ const MainStatContainer = ({ width, player, isCardView }) => {
                     typeStats == 'None'
                       ? 'None'
                       : typeStats.bestType +
-                        ' ' +
+                        ' (' +
                         Math.round(typeStats.bestTypeValue / 60) +
-                        'h'
+                        'h)'
                   }
                   secondTitle={'Less played class:'}
                   secondValue={
                     typeStats == 'None'
                       ? 'None'
                       : typeStats.worstType +
-                        ' ' +
-                        (Math.round(typeStats.worstTypeValue / 60) + 'h')
+                        ' (' +
+                        (Math.round(typeStats.worstTypeValue / 60) + 'h)')
                   }
                   margin={{ marginTop: 0 }}
                 />

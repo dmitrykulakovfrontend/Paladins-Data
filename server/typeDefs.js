@@ -37,6 +37,7 @@ const typeDefs = gql`
     Title: String
     latestChampion: String
     Last_Update: String
+    Roles: String
   }
 
   type Event {

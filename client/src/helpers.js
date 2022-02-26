@@ -57,26 +57,26 @@ const championsType = {
 };
 
 export const combineQueues = (...queues) => {
-  const badArray = [];
+  const arr = [];
 
   for (let i = 0; i < queues.length; i++) {
-    badArray.push(...queues[i]);
+    arr.push(...queues[i]);
   }
 
-  const bigArray = _.cloneDeep(badArray);
+  const queuesArr = _.cloneDeep(arr);
 
   const result = [];
 
   for (
     let championIndex = 0;
-    championIndex < bigArray.length;
+    championIndex < queuesArr.length;
     championIndex++
   ) {
     let ExistingIndex = result.findIndex(
-      (champion) => champion.Champion === bigArray[championIndex].Champion,
+      (champion) => champion.Champion === queuesArr[championIndex].Champion,
     );
     if (ExistingIndex !== -1) {
-      for (let [key, value] of Object.entries(bigArray[championIndex])) {
+      for (let [key, value] of Object.entries(queuesArr[championIndex])) {
         if (key === 'Champion') {
           continue;
         }
@@ -105,11 +105,11 @@ export const combineQueues = (...queues) => {
         result[ExistingIndex][key] += value;
       }
     } else {
-      result.push(bigArray[championIndex]);
+      result.push(queuesArr[championIndex]);
     }
   }
   const finalResults = [];
-  const results = result.sort(sortByChampName).forEach((champion) => {
+  result.sort(sortByChampName).forEach((champion) => {
     champion.Winrate = (
       (champion.Wins / (champion.Wins + champion.Losses)) *
       100

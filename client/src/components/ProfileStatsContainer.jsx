@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 
 import { FaSteam } from 'react-icons/fa';
 import { SiEpicgames } from 'react-icons/si';
+import HelpIcon from '@mui/icons-material/Help';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 
 import { rankedTiers } from '../Constants';
 import CardStatContent from './CardStatContent';
@@ -118,6 +121,22 @@ const ProfileStatsContainer = ({ width, player }) => {
                   }
                 >
                   {inGame}
+                  <Tooltip
+                    title={'Updates once in 30 minutes'}
+                    placement='top'
+                    disableInteractive
+                  >
+                    <IconButton color={`info`} edge='start' size='small'>
+                      <HelpIcon
+                        sx={{
+                          fontSize: 15,
+                          position: 'absolute',
+                          bottom: '5px',
+                          left: '4px',
+                        }}
+                      ></HelpIcon>
+                    </IconButton>
+                  </Tooltip>
                 </div>
               </div>
               <div className='account-created'>

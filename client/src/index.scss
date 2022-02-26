@@ -72,6 +72,39 @@ html {
   .stat-container {
     padding: 1em 0.2em 1em !important;
   }
+  .top-panel .class-buttons {
+    flex: 1 1;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    margin: 0 0.5em;
+    flex-wrap: wrap;
+    .class-button {
+      width: 100%;
+    }
+  }
+  .top-panel .search {
+    display: flex;
+    margin: 0 0.5em !important;
+    overflow: visible !important;
+
+    span input {
+      width: 100% !important;
+    }
+  }
+  .top-panel .divider {
+    display: none;
+  }
+  .top-panel {
+    flex-wrap: wrap;
+    height: 100% !important;
+  }
+  .p-accordion-content .ability {
+    flex-direction: column;
+    .information {
+      height: 100% !important;
+    }
+  }
 }
 @media only screen and (max-width: 1199px) {
   .stat-container,
@@ -509,7 +542,6 @@ button:active {
     background-color: #81001a;
     border: 1px solid transparent;
     color: #ddd;
-    transition: all 0.4s ease;
   }
 
   &.blocked {
@@ -637,7 +669,7 @@ button:active {
       }
 
       .p-accordion-header .p-accordion-header-link {
-        background: #1e1e1e;
+        background: #22262c;
         border: 0;
         border-radius: 4px;
         color: hsla(0, 0%, 100%, 0.87);
@@ -1168,185 +1200,158 @@ button:active {
   }
 }
 
-#colorWheel {
-  height: 100px;
-  width: 100px;
-  margin: 40px auto;
-  position: absolute;
-  left: 10%;
-  -webkit-transform-origin: 50px 150px;
-  -moz-transform-origin: 50px 150px;
-  -ms-transform-origin: 50px 150px;
-  -o-transform-origin: 50px 150px;
-  transform-origin: 50px 150px;
-  animation: wheel 5s linear alternate;
-  -moz-animation: wheel 5s linear alternate;
-  -webkit-animation: wheel 5s linear alternate;
-  -ms-animation: wheel 5s linear alternate;
-}
-@keyframes wheel {
-  0% {
-    transform: rotate(0deg);
+.top-panel {
+  align-items: center;
+  background-color: #212326e0;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 30%), 0 2px 8px rgba(0, 0, 0, 20%);
+  display: flex;
+  height: 60px;
+  margin: 1em 1em 0;
+  padding: 0.5em 0;
+
+  .search {
+    background-color: #1e1e1e;
+    border: 1px solid #4e4e4e;
+    border-radius: 4px;
+    margin-left: 1em;
+    overflow: hidden;
+
+    svg {
+      box-sizing: content-box;
+      color: #888;
+      font-size: 18px;
+      max-height: 18px;
+      padding: 0 0.5em;
+      vertical-align: middle;
+    }
+
+    .p-autocomplete {
+      display: inline-flex;
+      position: relative;
+
+      .p-inputtext {
+        border-left: 1px solid #4e4e4e;
+        height: 2em;
+        width: 300px;
+        appearance: none;
+        background: #1e1e1e;
+        border: 1px solid hsla(0, 0%, 100%, 0.3);
+        border-radius: 4px;
+        color: hsla(0, 0%, 100%, 0.87);
+        font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica,
+          Arial, Lucida Grande, sans-serif;
+        font-size: 1rem;
+        padding: 0.75rem;
+        transition: background-color 0.2s, border-color 0.2s, color 0.2s,
+          box-shadow 0.2s,
+          background-size 0.2s cubic-bezier(0.64, 0.09, 0.08, 1);
+      }
+    }
   }
-  100% {
-    transform: rotate(1800deg);
+  .divider {
+    background-color: #ffffff22;
+    height: 65%;
+    margin: 0 2em;
+    width: 1px;
+  }
+  .class-buttons {
+    display: flex;
+    .class-button {
+      border-radius: 4px;
+      height: 2em;
+      margin: 0 0.5em;
+    }
+
+    svg {
+      transition: all 0.4s ease;
+      &:hover {
+        cursor: pointer;
+        color: #81001a !important;
+      }
+    }
   }
 }
-#colorWheel span {
-  position: absolute;
-  -webkit-transform-origin: 50% 50%;
-  transform-origin: 50% 50%;
-  border-style: solid;
-  border-width: 150px 50px;
-  box-sizing: border-box;
-}
-#colorWheel span.color01 {
-  -webkit-transform: rotate(0deg);
-  -moz-transform: rotate(0deg);
-  -ms-transform: rotate(0deg);
-  -o-transform: rotate(0deg);
-  transform: rotate(0deg);
-  border-color: #43a1cd transparent transparent transparent;
-}
-#colorWheel span.color01::before {
-  content: 'Champ1';
-  position: absolute;
-  bottom: 100px;
-  right: -20px;
-  transform: rotate(100deg);
-}
-#colorWheel span.color02 {
-  -webkit-transform: rotate(36deg);
-  -moz-transform: rotate(36deg);
-  -ms-transform: rotate(36deg);
-  -o-transform: rotate(36deg);
-  transform: rotate(36deg);
-  border-color: #639b47 transparent transparent transparent;
-}
-#colorWheel span.color02::before {
-  content: 'Champ2';
-  position: absolute;
-  bottom: 100px;
-  right: -20px;
-  transform: rotate(108deg);
-}
-#colorWheel span.color03 {
-  -webkit-transform: rotate(72deg);
-  -moz-transform: rotate(72deg);
-  -ms-transform: rotate(72deg);
-  -o-transform: rotate(72deg);
-  transform: rotate(72deg);
-  border-color: #9ac147 transparent transparent transparent;
-}
-#colorWheel span.color04 {
-  -webkit-transform: rotate(108deg);
-  -moz-transform: rotate(108deg);
-  -ms-transform: rotate(108deg);
-  -o-transform: rotate(108deg);
-  transform: rotate(108deg);
-  border-color: #e1e23b transparent transparent transparent;
-}
-#colorWheel span.color05 {
-  -webkit-transform: rotate(144deg);
-  -moz-transform: rotate(144deg);
-  -ms-transform: rotate(144deg);
-  -o-transform: rotate(144deg);
-  transform: rotate(144deg);
-  border-color: #f7941e transparent transparent transparent;
-}
-#colorWheel span.color06 {
-  -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
-  transform: rotate(180deg);
-  border-color: #ba3e2e transparent transparent transparent;
-}
-#colorWheel span.color07 {
-  -webkit-transform: rotate(216deg);
-  -moz-transform: rotate(216deg);
-  -ms-transform: rotate(216deg);
-  -o-transform: rotate(216deg);
-  transform: rotate(216deg);
-  border-color: #9a1d34 transparent transparent transparent;
-}
-#colorWheel span.color07::before {
-  content: 'Androxus';
-  position: absolute;
-  bottom: 100px;
-  right: -40px;
-  transform: rotate(100deg);
-}
-#colorWheel span.color08 {
-  -webkit-transform: rotate(252deg);
-  -moz-transform: rotate(252deg);
-  -ms-transform: rotate(252deg);
-  -o-transform: rotate(252deg);
-  transform: rotate(252deg);
-  border-color: #662a6c transparent transparent transparent;
-}
-#colorWheel span.color08::before {
-  content: 'Ash';
-  position: absolute;
-  bottom: 100px;
-  right: -20px;
-  transform: rotate(100deg);
-}
-#colorWheel span.color09 {
-  -webkit-transform: rotate(288deg);
-  -moz-transform: rotate(288deg);
-  -ms-transform: rotate(288deg);
-  -o-transform: rotate(288deg);
-  transform: rotate(288deg);
-  border-color: #272b66 transparent transparent transparent;
-}
-#colorWheel span.color09::before {
-  content: 'Barik';
-  position: absolute;
-  bottom: 100px;
-  right: -20px;
-  transform: rotate(100deg);
-}
-#colorWheel span.color10 {
-  -webkit-transform: rotate(324deg);
-  -moz-transform: rotate(324deg);
-  -ms-transform: rotate(324deg);
-  -o-transform: rotate(324deg);
-  transform: rotate(324deg);
-  border-color: #2d559f transparent transparent transparent;
-}
-#colorWheel span.color10::before {
-  content: 'Seris';
-  position: absolute;
-  bottom: 100px;
-  right: -20px;
-  transform: rotate(100deg);
-}
-#colorWheel:before {
-  content: »»;
-  width: 300px;
-  height: 300px;
-  overflow: hidden;
-  position: absolute;
-  top: -30px;
-  left: -130px;
-  border-radius: 100%;
-  border: 30px solid #ffffff;
-  z-index: 100;
-  box-shadow: 0px 0px 2px 12px rgba (180, 180, 180, 0.5);
-}
-#colorWheel:after {
-  content: »»;
-  width: 100px;
-  height: 100px;
-  overflow: hidden;
-  position: absolute;
-  top: 100px;
-  left: 0px;
-  border-radius: 100%;
-  box-shadow: 0px 0px 2px 12px rgba (250, 250, 250, 0.5);
-  background: #444;
-  background-size: contain;
+
+.champions-container {
+  background-color: #212326e0;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 30%), 0 2px 8px rgba(0, 0, 0, 20%);
+  display: flex;
+  flex: 1 1;
+  flex-direction: column;
+  font-family: Roboto, sans-serif;
+  margin: 1em;
+  padding: 1em;
+
+  .champions-container-label {
+    color: #ccc;
+    font-family: Roboto, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-left: 5px;
+  }
+
+  .champions-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    .accordion-container {
+      height: -webkit-max-content;
+      height: max-content;
+      margin: 0.5em;
+      max-width: 335px;
+      width: 100%;
+    }
+    .p-accordion {
+      width: 100%;
+      .p-accordion-tab {
+        flex: 1 1;
+
+        .p-accordion-content p {
+          background-color: #1e1e1e;
+          color: #ccc;
+          font-size: 14px;
+        }
+      }
+
+      .p-accordion-tab:hover {
+        margin-bottom: 0;
+      }
+
+      .p-accordion-header {
+        background-color: #22262c;
+
+        .p-accordion-header-link {
+          background-color: #22262c;
+        }
+
+        .p-accordion-header-text {
+          display: flex;
+          width: 100%;
+        }
+      }
+    }
+    .champion-bg {
+      img {
+        height: 80px;
+      }
+    }
+    .champion-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-left: 0.5em;
+      .name {
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .champ-class {
+        color: #888;
+        font-size: 13px;
+      }
+    }
+  }
 }
 
 .line-crimson {

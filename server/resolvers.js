@@ -5,7 +5,7 @@ const ChampionsInfo = require("./models/ChampionsInfo.model");
 const api = require("./api.js");
 
 const CheckPlayerExistence = async (playerName) => {
-  const data = await api.dealWithRequest("isPlayerExist", playerName);
+  const data = await api.isPlayerExist(playerName);
   if (data === null) return null;
   if (data.error) {
     console.log(`Error: ${data.error}`);
@@ -36,7 +36,7 @@ const CheckPlayerExistence = async (playerName) => {
   } = data;
   const Tier = data.RankedKBM.Tier;
   const Points = data.RankedKBM.Points;
-  Status = Status[0].status;
+  Status = Status.status;
   const Last_Update = new Date().toISOString();
 
   const player = new Player({
@@ -71,7 +71,7 @@ const CheckPlayerExistence = async (playerName) => {
 const getPlayerResolver = async (parent, args, context, info) => {
   const { hz_player_name } = args;
   let player = await Player.findOne({
-    hz_player_name: { $regex: hz_player_name, $options: "I" },
+    hz_player_name: { $regex: `^${hz_player_name}$`, $options: "i" },
   });
   // Making check if player not in db and he exist, add his data and then return player.
   if (player === null) return CheckPlayerExistence(hz_player_name);
@@ -80,10 +80,11 @@ const getPlayerResolver = async (parent, args, context, info) => {
 
   // Comparing is 30 minutes gone, if no just return player else update data
   if (new Date() - new Date(Last_Update) <= 30 * 60 * 1000) {
+    console.log("nope");
     return player;
   }
 
-  let data = await api.dealWithRequest("isPlayerExist", hz_player_name);
+  let data = await api.isPlayerExist(hz_player_name);
   if (data.error) {
     console.log(`Error: ${data.error}`);
     return player;
@@ -113,10 +114,12 @@ const getPlayerResolver = async (parent, args, context, info) => {
   } = data;
   const Tier = data.RankedKBM.Tier;
   const Points = data.RankedKBM.Points;
-  Status = Status[0].status;
+  Status = Status.status;
   Last_Update = new Date().toISOString();
-  Player.findOneAndUpdate(
-    { $regex: new RegExp(hz_player_name, "i") },
+
+  // Updating Player and returning back
+  await Player.findOneAndUpdate(
+    { $regex: new RegExp(`^${hz_player_name}$`, "i") },
     {
       ActivePlayerId,
       AvatarURL,
@@ -160,7 +163,8 @@ const resolvers = {
         return info;
       }
 
-      const data = await api.dealWithRequest("getChampionsInfo", 1);
+      const data = await api.getChampionsInfo();
+      if (data === null) return ChampionsInfo.find();
 
       for (let i = 0; i < data.length; i++) {
         const {
@@ -177,6 +181,7 @@ const resolvers = {
           Speed,
           Title,
           latestChampion,
+          Roles,
         } = data[i];
 
         const Last_Update = new Date().toISOString();
@@ -197,11 +202,12 @@ const resolvers = {
             Title,
             latestChampion,
             Last_Update,
+            Roles,
           });
           newInfo.save();
           info.push(data[i]);
         } else {
-          newInfo = ChampionsInfo.findOneAndUpdate(
+          newInfo = await ChampionsInfo.findOneAndUpdate(
             { Name_English },
             {
               Ability_1,
@@ -218,6 +224,7 @@ const resolvers = {
               Title,
               latestChampion,
               Last_Update,
+              Roles,
             },
             { new: true }
           );

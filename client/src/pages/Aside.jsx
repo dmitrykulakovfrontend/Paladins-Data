@@ -7,9 +7,7 @@ import { GET_EVENTS } from '../query/events';
 import Timer from '../components/Timer';
 
 const Asidecontent = (props) => {
-  const [time, setTime] = useState({});
   const [timeLeft1, setTimeLeft1] = useState({});
-  const [timeLeft2, setTimeLeft2] = useState({});
   const [timeEvents, setTimeEvents] = useState([]);
   const [getEvents, { loading, error, data }] = useLazyQuery(GET_EVENTS, {
     errorPolicy: 'all',
@@ -101,6 +99,20 @@ const Asidecontent = (props) => {
           //   </NavLink>
           // </div>
         }
+        <div className='menu-entry'>
+          <Link to='/' className='entry-title'>
+            Info
+          </Link>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? 'entry-link active-link' : 'entry-link'
+            }
+            to='/champions'
+            onClick={props.closeMenu}
+          >
+            Champions
+          </NavLink>
+        </div>
         <div className='menu-entry'>
           <Link to='/' className='entry-title'>
             Tools
