@@ -3,7 +3,7 @@ import { BiRun } from 'react-icons/bi';
 import { GiHealthNormal } from 'react-icons/gi';
 import { v4 as uuid4 } from 'uuid';
 
-const Accordion = ({ champion }) => {
+const Accordion = ({ champion, pk }) => {
   const [isActive, setIsActive] = useState(false);
 
   let role = '';
@@ -23,29 +23,29 @@ const Accordion = ({ champion }) => {
 
   return (
     <div
-      class='accordion-container'
+      className='accordion-container'
       style={isActive ? { maxWidth: '100%' } : {}}
     >
-      <div class='p-accordion p-component'>
-        <div class='p-accordion-tab'>
+      <div className='p-accordion p-component'>
+        <div className='p-accordion-tab'>
           <div
-            class='p-accordion-header'
+            className='p-accordion-header'
             onClick={() => setIsActive(!isActive)}
           >
-            <a class='p-accordion-header-link'>
+            <a className='p-accordion-header-link'>
               <span
-                class='p-accordion-header-text'
+                className='p-accordion-header-text'
                 style={
                   isActive
                     ? { justifyContent: 'center', alignItems: 'center' }
                     : {}
                 }
               >
-                <div class='champion-bg'>
+                <div className='champion-bg'>
                   <img alt='' src={champion.ChampionIcon_URL} />
                 </div>
                 <div
-                  class='champion-info'
+                  className='champion-info'
                   style={{
                     width: '100%',
                     textAlign: 'center',
@@ -53,12 +53,12 @@ const Accordion = ({ champion }) => {
                     alignItems: 'center',
                   }}
                 >
-                  <div class='name'>
+                  <div className='name'>
                     {champion.Name_English} – {champion.Title}
                   </div>
-                  <div class='champ-class'>{role}</div>
+                  <div className='champ-class'>{role}</div>
                   <div
-                    class='champ-speed'
+                    className='champ-speed'
                     style={{
                       alignSelf: `center`,
                       justifySelf: `center`,
@@ -67,7 +67,7 @@ const Accordion = ({ champion }) => {
                     <BiRun /> {champion.Speed}
                   </div>
                   <div
-                    class='champ-health'
+                    className='champ-health'
                     style={{
                       alignSelf: `center`,
                       justifySelf: `center`,
@@ -95,7 +95,6 @@ const Accordion = ({ champion }) => {
                       border: '2px solid #40454e',
                       margin: '10px 0',
                     }}
-                    pk={uuid4()}
                   >
                     <div
                       className='icon'
