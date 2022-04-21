@@ -10,7 +10,6 @@ module.exports.getChampionsInfo = async () => {
   let data;
   try {
     data = await api.getChampions();
-    console.log(data);
     return data;
   } catch (error) {
     console.log(error);

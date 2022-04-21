@@ -228,6 +228,26 @@ const resolvers = {
             },
             { new: true }
           );
+          if (!newInfo) {
+            newInfo = new ChampionsInfo({
+              Ability_1,
+              Ability_2,
+              Ability_3,
+              Ability_4,
+              Ability_5,
+              ChampionIcon_URL,
+              Health,
+              Lore,
+              Name_English,
+              OnFreeWeeklyRotation,
+              Speed,
+              Title,
+              latestChampion,
+              Last_Update,
+              Roles,
+            });
+            newInfo.save();
+          }
           data[i].Last_Update = Last_Update;
           info[i] = data[i];
         }
