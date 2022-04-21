@@ -22,15 +22,14 @@ const ChampionsInfo = ({ width }) => {
   }, [data]);
 
   const handleInput = (e) => {
-    setInput(e.target.value);
+    setInput(e.target.value.toLowerCase());
     setSortType('All Champions');
-    setFilteredChampions(
-      champions.filter((champion) => {
-        return champion.Name_English.toLowerCase().includes(
-          e.target.value.toLowerCase(),
-        );
-      }),
+
+    const filtered = champions.filter((champ) =>
+      champ.Name_English.toLowerCase().includes(input),
     );
+
+    setFilteredChampions(filtered);
   };
   const filterChampions = (Role) => {
     setInput('');
@@ -177,7 +176,7 @@ const ChampionsInfo = ({ width }) => {
         <div className='line-grey-left'></div>
         <div className='champions-list'>
           {filteredChampions.map((champion) => {
-            return <Accordion champion={champion} pk={uuid4()} />;
+            return <Accordion champion={champion} key={uuid4()} />;
           })}
         </div>
       </div>
