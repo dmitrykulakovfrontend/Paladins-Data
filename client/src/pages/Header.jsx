@@ -1,17 +1,13 @@
 /* eslint-disable operator-linebreak */
 import { useState, useEffect, useRef } from 'react';
-import { MdOutlineAutoGraph } from 'react-icons/md';
+import { MdOutlineAutoGraph, MdMail } from 'react-icons/md';
 import { BsDiscord, BsGithub } from 'react-icons/bs';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import Aside from './Aside';
 
-const Header = (props) => {
+const Header = ({ width }) => {
   const [isActiveMenu, setActiveMenu] = useState(false);
-  const [players, setPlayers] = useState('');
-
-  const toggleMenu = () => {
-    setActiveMenu(!isActiveMenu);
-  };
+  const [players, setPlayers] = useState('Fetching...');
 
   useEffect(() => {
     fetch(`/onlinePlayers`).then((response) => {
@@ -24,21 +20,17 @@ const Header = (props) => {
   return (
     <header className='header-container'>
       <div className='nav-container'>
-        {props.width >= 1199 ? (
-          ''
-        ) : (
+        {width <= 1199 && (
           <div
             className={
               isActiveMenu ? 'burger-container active' : 'burger-container'
             }
-            onClick={toggleMenu}
+            onClick={() => setActiveMenu(!isActiveMenu)}
           >
             <GiHamburgerMenu style={{ color: '#ccc' }} />
           </div>
         )}
-        {props.width >= 1199 ? (
-          ''
-        ) : (
+        {width <= 1199 && (
           <div
             className={
               isActiveMenu
@@ -46,7 +38,10 @@ const Header = (props) => {
                 : 'aside aside-m slide-out'
             }
           >
-            <Aside width={props.width} closeMenu={toggleMenu} />
+            <Aside
+              width={width}
+              closeMenu={() => setActiveMenu(!isActiveMenu)}
+            />
           </div>
         )}
         <div className='logo-container'>
@@ -55,19 +50,17 @@ const Header = (props) => {
         </div>
         <div className='players-container'>
           <p> Players Online:</p>
-          <p className='logo-text'>{players ? players : 'Fetching...'}</p>
+          <p className='logo-text'>{players}</p>
         </div>
-        {props.width >= 1199 ? (
+        {width >= 1199 && (
           <div className='social-container'>
-            <a href='#'>
-              <BsDiscord />
+            <a href='mailto:atomeistee@gmail.com'>
+              <MdMail />
             </a>
             <a href='https://github.com/AtomEistee'>
               <BsGithub />
             </a>
           </div>
-        ) : (
-          ''
         )}
       </div>
       <div className='line-crimson'></div>
