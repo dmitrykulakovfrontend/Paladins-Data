@@ -25,16 +25,6 @@ const client = new ApolloClient({
   defaultOptions: defaultOptions,
 });
 
-const options = {
-  // you can also just use 'bottom center'
-  position: 'top center',
-  timeout: 5000,
-  offset: '10px',
-  type: 'info',
-  containerStyle: { fontSize: '10px', zIndex: '9999' },
-  // you can also just use 'scale'
-  transition: 'fade',
-};
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
