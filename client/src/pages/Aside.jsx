@@ -12,6 +12,9 @@ const Asidecontent = ({ width, closeMenu }) => {
   const [timeEvents, setTimeEvents] = useState([]);
   const { loading, error, data } = useQuery(GET_EVENTS);
 
+  const isActiveLink = ({ isActive }) =>
+    isActive ? 'entry-link active-link' : 'entry-link';
+
   useEffect(() => data && setTimeEvents(data.getAllEvents), [data]);
 
   useEffect(() => {
@@ -35,75 +38,53 @@ const Asidecontent = ({ width, closeMenu }) => {
 
   return (
     <>
-      <div className='menu-container'>
+      <nav className='menu-container'>
         <div className='menu-entry'>
-          <Link to='/' className='entry-title'>
-            Home
-          </Link>
+          <h3 className='entry-title'>Home</h3>
           <NavLink
-            className={({ isActive }) =>
-              isActive ? 'entry-link active-link' : 'entry-link'
-            }
+            className={isActiveLink}
             to='players#playersearch'
             onClick={closeMenu}
           >
             Search player
           </NavLink>
           <NavLink
-            className={({ isActive }) =>
-              isActive ? 'entry-link active-link' : 'entry-link'
-            }
+            className={isActiveLink}
             to='players#faq'
             onClick={closeMenu}
           >
             FAQ
           </NavLink>
         </div>
+
         <div className='menu-entry'>
-          <Link to='/' className='entry-title'>
-            Info
-          </Link>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? 'entry-link active-link' : 'entry-link'
-            }
-            to='/champions'
-            onClick={closeMenu}
-          >
+          <h3 className='entry-title'>Info</h3>
+          <NavLink className={isActiveLink} to='/champions' onClick={closeMenu}>
             Champions
           </NavLink>
         </div>
+
         <div className='menu-entry'>
-          <Link to='/' className='entry-title'>
-            Tools
-          </Link>
+          <h3 className='entry-title'>Tools</h3>
           <NavLink
-            className={({ isActive }) =>
-              isActive ? 'entry-link active-link' : 'entry-link'
-            }
+            className={isActiveLink}
             to='/randomchampion'
             onClick={closeMenu}
           >
             Random Champion Wheel
           </NavLink>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? 'entry-link active-link' : 'entry-link'
-            }
-            to='/compare'
-            onClick={closeMenu}
-          >
+          <NavLink className={isActiveLink} to='/compare' onClick={closeMenu}>
             Compare Players
           </NavLink>
         </div>
+
         <div className='menu-entry'>
-          <Link to='/' className='entry-title'>
-            Timers
-          </Link>
+          <h3 className='entry-title'>Timers</h3>
           {timeEvents.map((event) => (
             <Timer event={event} color='orange' key={uuid4()} />
           ))}
         </div>
+
         {width <= 1199 && (
           <div className='menu-entry'>
             <p className='entry-title'>Socials</p>
@@ -117,8 +98,9 @@ const Asidecontent = ({ width, closeMenu }) => {
             </div>
           </div>
         )}
-      </div>
-      <div className='footer-container'>
+      </nav>
+
+      <footer className='footer-container'>
         <div className='line-grey'></div>
         <div className='warning'>
           This website is NOT affiliated with Steam or Evil Mojo.
@@ -130,7 +112,7 @@ const Asidecontent = ({ width, closeMenu }) => {
             {new Date().getFullYear()}
           </p>
         </div>
-      </div>
+      </footer>
     </>
   );
 };

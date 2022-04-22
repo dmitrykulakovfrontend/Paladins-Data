@@ -6,19 +6,19 @@ const Timer = ({ event, color }) => {
 
   return (
     <div className={`timer-container timer-${color}`}>
-      <div className='timer-label'>{event ? event.title : 'Loading...'}</div>
+      <h4 className='timer-label'>{event ? event.title : 'Loading...'}</h4>
       <Tooltip
         title={event.timeLeft ? event.timeLeft.tooltipTitle : 'Loading...'}
         placement='right'
         disableInteractive
       >
-        <div className='timer-countdown'>
+        <span className='timer-countdown'>
           {event.timeLeft
             ? `${event.timeLeft.days} days,
 ${event.timeLeft.hours}:${event.timeLeft.minutes}:${event.timeLeft.seconds}
 `
             : 'Loading...'}
-        </div>
+        </span>
       </Tooltip>
     </div>
   );

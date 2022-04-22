@@ -1,5 +1,6 @@
 /* eslint-disable operator-linebreak */
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { MdOutlineAutoGraph, MdMail } from 'react-icons/md';
 import { BsDiscord, BsGithub } from 'react-icons/bs';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -44,10 +45,10 @@ const Header = ({ width }) => {
             />
           </div>
         )}
-        <div className='logo-container'>
+        <Link to='/' className='logo-container'>
           <MdOutlineAutoGraph className='icon' />
           <p className='logo-text'>Paladins Data</p>
-        </div>
+        </Link>
         <div className='players-container'>
           <p> Players Online:</p>
           <p className='logo-text'>{players}</p>
