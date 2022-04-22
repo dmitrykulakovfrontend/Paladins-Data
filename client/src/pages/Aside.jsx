@@ -1,61 +1,37 @@
 /* eslint-disable operator-linebreak */
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { BsDiscord, BsGithub } from 'react-icons/bs';
 import { NavLink, Link } from 'react-router-dom';
-import { useLazyQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { GET_EVENTS } from '../query/events';
 import Timer from '../components/Timer';
+import { calculateTimeLeft } from '../helpers';
+import { v4 as uuid4 } from 'uuid';
 
-const Asidecontent = (props) => {
-  const [timeLeft1, setTimeLeft1] = useState({});
+const Asidecontent = ({ width, closeMenu }) => {
   const [timeEvents, setTimeEvents] = useState([]);
-  const [getEvents, { loading, error, data }] = useLazyQuery(GET_EVENTS, {
-    errorPolicy: 'all',
-  });
+  const { loading, error, data } = useQuery(GET_EVENTS);
 
-  useEffect(async () => {
-    const answer = await getEvents();
-    setTimeEvents(answer.data.getAllEvents);
-  }, []);
-
-  useEffect(() => {}, [timeEvents]);
-
-  const calculateTimeLeft = (date) => {
-    const difference = +new Date(date) - +new Date();
-
-    let timeLeft = {};
-
-    if (difference > 0) {
-      timeLeft = {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours:
-          Math.floor((difference / (1000 * 60 * 60)) % 24) < 10
-            ? '0' + Math.floor((difference / (1000 * 60 * 60)) % 24)
-            : Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes:
-          Math.floor((difference / 1000 / 60) % 60) < 10
-            ? '0' + Math.floor((difference / 1000 / 60) % 60)
-            : Math.floor((difference / 1000 / 60) % 60),
-        seconds:
-          Math.floor((difference / 1000) % 60) < 10
-            ? '0' + Math.floor((difference / 1000) % 60)
-            : Math.floor((difference / 1000) % 60),
-        title: new Date(date).toUTCString(),
-      };
-    }
-    return timeLeft;
-  };
+  useEffect(() => data && setTimeEvents(data.getAllEvents), [data]);
 
   useEffect(() => {
-    if (timeEvents.length === 0) return;
+    if (!timeEvents) return;
     const timer = setTimeout(() => {
-      setTimeLeft1(calculateTimeLeft(timeEvents[0].ends));
+      const newTimeEvents = [];
+
+      timeEvents.forEach((event) => {
+        const newEvent = JSON.parse(JSON.stringify(event));
+        newEvent.timeLeft = calculateTimeLeft(event.ends);
+        newTimeEvents.push(newEvent);
+      });
+
+      setTimeEvents(newTimeEvents);
     }, 1000);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [timeLeft1, timeEvents]);
+  }, [timeEvents]);
 
   return (
     <>
@@ -69,7 +45,7 @@ const Asidecontent = (props) => {
               isActive ? 'entry-link active-link' : 'entry-link'
             }
             to='players#playersearch'
-            onClick={props.closeMenu}
+            onClick={closeMenu}
           >
             Search player
           </NavLink>
@@ -78,27 +54,11 @@ const Asidecontent = (props) => {
               isActive ? 'entry-link active-link' : 'entry-link'
             }
             to='players#faq'
-            onClick={props.closeMenu}
+            onClick={closeMenu}
           >
             FAQ
           </NavLink>
         </div>
-        {
-          //   <div className='menu-entry'>
-          //   <Link to='/' className='entry-title'>
-          //     Info
-          //   </Link>
-          //   <NavLink
-          //     className={({ isActive }) =>
-          //       isActive ? 'entry-link active-link' : 'entry-link'
-          //     }
-          //     to='/patchnotes'
-          //     onClick={props.closeMenu}
-          //   >
-          //     Patch Notes
-          //   </NavLink>
-          // </div>
-        }
         <div className='menu-entry'>
           <Link to='/' className='entry-title'>
             Info
@@ -108,7 +68,7 @@ const Asidecontent = (props) => {
               isActive ? 'entry-link active-link' : 'entry-link'
             }
             to='/champions'
-            onClick={props.closeMenu}
+            onClick={closeMenu}
           >
             Champions
           </NavLink>
@@ -122,7 +82,7 @@ const Asidecontent = (props) => {
               isActive ? 'entry-link active-link' : 'entry-link'
             }
             to='/randomchampion'
-            onClick={props.closeMenu}
+            onClick={closeMenu}
           >
             Random Champion Wheel
           </NavLink>
@@ -131,7 +91,7 @@ const Asidecontent = (props) => {
               isActive ? 'entry-link active-link' : 'entry-link'
             }
             to='/compare'
-            onClick={props.closeMenu}
+            onClick={closeMenu}
           >
             Compare Players
           </NavLink>
@@ -140,9 +100,11 @@ const Asidecontent = (props) => {
           <Link to='/' className='entry-title'>
             Timers
           </Link>
-          <Timer time={timeEvents[0]} timeLeft={timeLeft1} color='orange' />
+          {timeEvents.map((event) => (
+            <Timer event={event} color='orange' key={uuid4()} />
+          ))}
         </div>
-        {props.width <= 1199 ? (
+        {width <= 1199 && (
           <div className='menu-entry'>
             <p className='entry-title'>Socials</p>
             <div className='social-container'>
@@ -154,8 +116,6 @@ const Asidecontent = (props) => {
               </a>
             </div>
           </div>
-        ) : (
-          ''
         )}
       </div>
       <div className='footer-container'>

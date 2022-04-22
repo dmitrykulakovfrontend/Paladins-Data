@@ -56,6 +56,32 @@ const championsType = {
   Zhin: 'Flank',
 };
 
+export const calculateTimeLeft = (date) => {
+  const difference = +new Date(date) - +new Date();
+
+  let timeLeft = {};
+
+  if (difference > 0) {
+    timeLeft = {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours:
+        Math.floor((difference / (1000 * 60 * 60)) % 24) < 10
+          ? '0' + Math.floor((difference / (1000 * 60 * 60)) % 24)
+          : Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutes:
+        Math.floor((difference / 1000 / 60) % 60) < 10
+          ? '0' + Math.floor((difference / 1000 / 60) % 60)
+          : Math.floor((difference / 1000 / 60) % 60),
+      seconds:
+        Math.floor((difference / 1000) % 60) < 10
+          ? '0' + Math.floor((difference / 1000) % 60)
+          : Math.floor((difference / 1000) % 60),
+      tooltipTitle: new Date(date).toUTCString(),
+    };
+  }
+  return timeLeft;
+};
+
 export const combineQueues = (...queues) => {
   const arr = [];
 
