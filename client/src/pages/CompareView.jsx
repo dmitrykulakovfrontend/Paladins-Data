@@ -1,8 +1,9 @@
-import  { useState, useEffect, useRef, Fragment } from 'react';
+import { useState, useEffect, useRef, Fragment } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
 import { GET_PLAYER } from '../query/player';
+import { GET_CHAMPIONS_ROLES } from '../query/champions';
 import { combineQueues, makeOverallStats } from '../helpers';
 import Tooltip from '@mui/material/Tooltip';
 
@@ -10,7 +11,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import IconButton from '@mui/material/IconButton';
 import CircularProgress from '@mui/material/CircularProgress';
 const CompareView = ({ switchComparing }) => {
-  const [state, setState] = useState({
+  const [ state, setState ] = useState({
     firstPlayerInput: '',
     secondPlayerInput: '',
     playersNotFound: false,
@@ -18,7 +19,12 @@ const CompareView = ({ switchComparing }) => {
     isPlayer1Loading: false,
     isPlayer2Loading: false,
   });
-  const [getPlayer, { loading, error, data }] = useLazyQuery(GET_PLAYER);
+
+
+  const [ getPlayer, { loading: playerLoading, error: playerError, data: playerData } ] = useLazyQuery(
+    GET_PLAYER,
+  );
+  const [ getRoles, { loading: RolesLoading, error: RolesError, data: RolesData } ] = useLazyQuery(GET_CHAMPIONS_ROLES);
   let navigate = useNavigate();
 
   const comparePlayers = async (e) => {
@@ -37,16 +43,26 @@ const CompareView = ({ switchComparing }) => {
       });
       return;
     }
-    const player1 = await getPlayer({
-      variables: {
-        hz_player_name: state.firstPlayerInput,
-      },
-    });
-    const player2 = await getPlayer({
-      variables: {
-        hz_player_name: state.secondPlayerInput,
-      },
-    });
+
+    const answer = await Promise.all([
+      getRoles(),
+      getPlayer({
+        variables: {
+          hz_player_name: state.firstPlayerInput,
+        },
+      }),
+      getPlayer({
+        variables: {
+          hz_player_name: state.secondPlayerInput,
+        },
+      })
+    ]);
+
+    console.log(answer);
+
+    const rolesList = answer[ 0 ].data.getChampionsInfo;
+    const player1 = answer[ 1 ];
+    const player2 = answer[ 2 ];
     if (
       player1.error ||
       player1.data.getPlayer === null ||
@@ -67,7 +83,7 @@ const CompareView = ({ switchComparing }) => {
     players.push(player2.data.getPlayer);
 
     players.forEach((player) => {
-      const queues = combineQueues(
+      const queues = combineQueues(rolesList,
         player.Competitive,
         player.Siege,
         player.TDM,
@@ -75,10 +91,10 @@ const CompareView = ({ switchComparing }) => {
       );
 
       const casual = makeOverallStats(
-        combineQueues(player.Siege, player.TDM, player.Onslaught),
+        combineQueues(rolesList, player.Siege, player.TDM, player.Onslaught),
       );
 
-      const ranked = makeOverallStats(combineQueues(player.Competitive));
+      const ranked = makeOverallStats(combineQueues(rolesList, player.Competitive));
 
       const overall = makeOverallStats(queues);
 
@@ -89,7 +105,7 @@ const CompareView = ({ switchComparing }) => {
     });
 
     navigate(
-      `../players/compare/${players[0].ActivePlayerId}:${players[1].ActivePlayerId}`,
+      `../players/compare/${players[ 0 ].ActivePlayerId}:${players[ 1 ].ActivePlayerId}`,
       {
         state: { players },
         replace: true,
@@ -189,7 +205,7 @@ const CompareView = ({ switchComparing }) => {
           <button className='light-button' onClick={() => switchComparing()}>
             <span style={{ marginLeft: `0.5em` }}>Back</span>
           </button>
-          {loading ? <CircularProgress color='info' size={25} /> : ''}
+          {playerLoading || RolesLoading ? <CircularProgress color='info' size={25} /> : ''}
           <button
             className='light-button'
             type='submit'

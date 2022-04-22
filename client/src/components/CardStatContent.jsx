@@ -20,7 +20,7 @@ const CardStatContent = ({
       <div className='card-stat-data'>
         <div className='showcase-entry'>
           <p className='showcase-entry-label'>
-            {firstTitle}{' '}
+            {firstTitle}
             {tooltip && (
               <Tooltip title={tooltip.data} placement='top' disableInteractive>
                 <IconButton color={tooltip.type} edge='start' size='small'>

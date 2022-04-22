@@ -10,7 +10,8 @@ import { rankedTiers } from '../Constants';
 import CardStatContent from './CardStatContent';
 
 const ProfileStatsContainer = ({ width, player }) => {
-  const [inGame, setInGame] = useState(true);
+  const [ inGame, setInGame ] = useState('');
+  console.log(player);
 
   useEffect(() => {
     switch (player.playerData.Status) {
@@ -30,13 +31,14 @@ const ProfileStatsContainer = ({ width, player }) => {
         setInGame('Offline');
         break;
     }
-  }, []);
+    console.log(inGame);
+  }, [ player ]);
 
   const normalise = (value, MIN, MAX) => ((value - MIN) * 100) / (MAX - MIN);
   const normaliseDate = (date) => {
     let realDate = new Date(date).toUTCString().slice(5, 16);
     realDate = realDate.split('');
-    realDate[6] = ', ';
+    realDate[ 6 ] = ', ';
     realDate = realDate.join('');
     return realDate;
   };
@@ -54,7 +56,7 @@ const ProfileStatsContainer = ({ width, player }) => {
           <div className='card-stat-content'>
             <div
               className={
-                player.playerData.Status > 0 && player.playerData.Status < 4
+                player.playerData.Status > 0 && player.playerData.Status <= 4
                   ? 'icon-wrapper in-game'
                   : 'icon-wrapper offline'
               }
@@ -65,18 +67,18 @@ const ProfileStatsContainer = ({ width, player }) => {
                     ? player.playerData.AvatarURL
                     : 'https://hirez-api-docs.herokuapp.com/paladins/avatar/27649'
                 }
-                alt=''
+                alt='Avatar'
               />
             </div>
             <div className='profile-info'>
               <div
                 className={
-                  player.playerData.Status > 0 && player.playerData.Status < 4
+                  player.playerData.Status > 0 && player.playerData.Status <= 4
                     ? 'profile-name in-game'
                     : 'profile-name offline'
                 }
               >
-                {player.playerData.hz_player_name}{' '}
+                {player.playerData.hz_player_name}
                 <p
                   className='showcase-entry-data'
                   style={{
@@ -89,6 +91,7 @@ const ProfileStatsContainer = ({ width, player }) => {
                     height: 'fit-content',
                     display: 'inline',
                     padding: '0 2px',
+                    margin: '0 5px',
                   }}
                 >
                   {player.playerData.Level}
@@ -97,14 +100,14 @@ const ProfileStatsContainer = ({ width, player }) => {
               <div
                 style={{ marginTop: '5px' }}
                 className={
-                  player.playerData.Status > 0 && player.playerData.Status < 4
+                  player.playerData.Status > 0 && player.playerData.Status <= 4
                     ? 'profile-name in-game'
                     : 'profile-name offline'
                 }
               >
                 {player.playerData.Title}
               </div>
-              <div className='profile-id'>{player.playerData.Id}</div>
+              <div className='profile-id'>id: {player.playerData.id}</div>
               <div className='online-status'>
                 <div
                   className={
@@ -140,20 +143,20 @@ const ProfileStatsContainer = ({ width, player }) => {
                 </div>
               </div>
               <div className='account-created'>
-                Account Created:{' '}
+                {'Account Created: '}
                 <span style={{ position: 'relative' }}>
-                  {createdDate}{' '}
+                  {createdDate + ' '}
                   {player.playerData.Platform === 'Steam' ? (
                     <FaSteam
                       style={{
                         color: 'gray',
                         fontSize: '20px',
                         position: 'absolute',
-                        right: '-20px',
+                        right: '-25px',
                         bottom: '5px',
                       }}
                     />
-                  ) : player.playerData.Platform === 'Epic Games' ? (
+                  ) : player.playerData.Platform === 'Epic Games' && (
                     <SiEpicgames
                       style={{
                         color: 'gray',
@@ -163,17 +166,12 @@ const ProfileStatsContainer = ({ width, player }) => {
                         bottom: '5px',
                       }}
                     />
-                  ) : (
-                    ''
                   )}
                 </span>
               </div>
               <div className='profile-links'>
                 <div className='account-created'>
                   Last login: <span>{lastLoginDate}</span>
-                </div>
-                <div>
-                  <a href='#' rel='noreferrer' target='_blank'></a>
                 </div>
               </div>
             </div>
@@ -205,7 +203,7 @@ const ProfileStatsContainer = ({ width, player }) => {
             firstValue={
               player.playerData.Tier === 0
                 ? 'Qualifying'
-                : rankedTiers[player.playerData.Tier]
+                : rankedTiers[ player.playerData.Tier ]
             }
             secondTitle={'Triumph Points:'}
             secondValue={`${player.playerData.Points} / 100`}

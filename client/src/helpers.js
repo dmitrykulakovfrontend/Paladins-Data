@@ -186,7 +186,7 @@ export const countMostPlayedType = (queues) => {
   };
 
   queues.forEach((champion) => {
-    types[champion.type] += champion.Minutes;
+    types[champion.Role] += champion.Minutes;
   });
   let best = 0;
   let type = '';

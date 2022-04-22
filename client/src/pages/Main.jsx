@@ -32,9 +32,8 @@ const Main = ({ comparing }) => {
   const location = useLocation();
 
 
-  const [ getPlayer, { loading: playerLoading, error: playerError, data: playerData, refetch } ] = useLazyQuery(
+  const [ getPlayer, { loading: playerLoading, error: playerError, data: playerData } ] = useLazyQuery(
     GET_PLAYER,
-    { errorPolicy: 'all' },
   );
   const [ getRoles, { loading: RolesLoading, error: RolesError, data: RolesData } ] = useLazyQuery(GET_CHAMPIONS_ROLES);
 

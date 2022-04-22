@@ -721,21 +721,10 @@ button:active {
   background-color: #222;
   background-image: url(./paladins-orvus-scaled.jpg);
   background-repeat: no-repeat;
-  background-size: 1120px;
+  background-size: 1200px;
   display: flex;
   flex: 1 1;
   flex-direction: column;
-}
-
-.top-panel {
-  align-items: center;
-  background-color: #131313e0;
-  border-radius: 3px;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 30%), 0 2px 8px rgba(0, 0, 0, 20%);
-  display: flex;
-  height: 60px;
-  margin: 1em 1em 0;
-  padding: 0.5em 0;
 }
 
 .stat-container {
@@ -745,7 +734,7 @@ button:active {
   display: flex;
   flex-direction: column;
   font-family: Roboto, sans-serif;
-  margin: 1em 1em 0;
+  margin: 1em 0;
   padding: 1em;
 
   .stat-container-content.player-container {
@@ -1208,7 +1197,7 @@ button:active {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 30%), 0 2px 8px rgba(0, 0, 0, 20%);
   display: flex;
   height: 60px;
-  margin: 1em 1em 0;
+  margin: 1em 0;
   padding: 0.5em 0;
 
   .search {
@@ -1256,24 +1245,24 @@ button:active {
     margin: 0 2em;
     width: 1px;
   }
-  .class-buttons {
-    display: flex;
-    .class-button {
-      border-radius: 4px;
-      height: 2em;
-      margin: 0 0.5em;
-    }
+}
 
-    svg {
-      transition: all 0.4s ease;
-      &:hover {
-        cursor: pointer;
-        color: #81001a !important;
-      }
+.class-buttons {
+  display: flex;
+  .class-button {
+    border-radius: 4px;
+    height: 2em;
+    margin: 0 0.5em;
+  }
+
+  svg {
+    transition: all 0.4s ease;
+    &:hover {
+      cursor: pointer;
+      color: #81001a !important;
     }
   }
 }
-
 .champions-container {
   background-color: #212326e0;
   border-radius: 3px;

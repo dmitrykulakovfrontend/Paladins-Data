@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
 import { GET_PLAYER } from '../query/player';
+import { GET_CHAMPIONS_ROLES } from '../query/champions';
 import { combineQueues, makeOverallStats } from '../helpers.js';
 import { Helmet } from 'react-helmet-async';
 
@@ -12,34 +13,37 @@ import MainStatContainer from '../components/MainStatContainer';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const PlayerContent = ({ width }) => {
-  const [getPlayer, { loading, error, data }] = useLazyQuery(GET_PLAYER);
-  const [selectedChampion, setSelectedChampion] = useState('');
-  const [playerData, setPlayerData] = useState(null);
-  const [isCardView, setCardView] = useState(true);
-  const didMount = useRef(false);
+  const [ getPlayer, { loading: playerLoading, error: playerError, data } ] = useLazyQuery(
+    GET_PLAYER,
+  );
+  const [ getRoles, { loading: RolesLoading, error: RolesError, data: RolesData } ] = useLazyQuery(GET_CHAMPIONS_ROLES);
+  const [ selectedChampion, setSelectedChampion ] = useState('');
+  const [ player, setPlayer ] = useState(null);
+  const [ isCardView, setCardView ] = useState(true);
   let location = useLocation();
-  let name = location.pathname.split('/')[2];
-  let player = playerData;
+  let name = location.pathname.split('/')[ 2 ];
 
   useEffect(() => {
     if (location.state) {
-      setPlayerData(location.state);
+      setPlayer(location.state);
     }
   }, []);
 
   useEffect(async () => {
     if (player) return;
-    const newData = {};
 
-    const answer = await getPlayer({
+    const answer = await Promise.all([ getPlayer({
       variables: { hz_player_name: name },
-    });
-    if (answer.error || answer.data.getPlayer === null) {
+    }), getRoles() ])
+
+    if (answer[ 0 ].data.getPlayer === null) {
       answer.error && console.log(answer.error);
       return;
     }
-    const playerData = answer.data.getPlayer;
-    const queues = combineQueues(
+
+    const playerData = answer[ 0 ].data.getPlayer;
+    const rolesList = answer[ 1 ].data.getChampionsInfo;
+    const queues = combineQueues(rolesList,
       playerData.Competitive,
       playerData.Siege,
       playerData.TDM,
@@ -47,19 +51,20 @@ const PlayerContent = ({ width }) => {
     );
 
     const casual = makeOverallStats(
-      combineQueues(playerData.Siege, playerData.TDM, playerData.Onslaught),
+      combineQueues(rolesList, playerData.Siege, playerData.TDM, playerData.Onslaught),
     );
 
-    const ranked = makeOverallStats(combineQueues(playerData.Competitive));
+    const ranked = makeOverallStats(combineQueues(rolesList, playerData.Competitive));
 
     const overall = makeOverallStats(queues);
 
-    newData.playerData = playerData;
-    newData.ranked = ranked;
-    newData.overall = overall;
-    newData.casual = casual;
-    newData.queues = queues;
-    setPlayerData(newData);
+    setPlayer({
+      playerData,
+      ranked,
+      overall,
+      casual,
+      queues,
+    });
   }, []);
 
   useEffect(() => {
@@ -85,7 +90,6 @@ const PlayerContent = ({ width }) => {
         <CircularProgress color='secondary' size={300} />
       </div>
     );
-  if (error) return <div>error</div>;
 
   return (
     <div className='main-content-container-bg'>

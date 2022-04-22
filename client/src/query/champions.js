@@ -4,6 +4,7 @@ export const GET_ICONS = gql`
   query getChampionsIcon {
     getChampionsInfo {
       ChampionIcon_URL
+      Roles
     }
   }
 `;
