@@ -2,8 +2,6 @@ import React from 'react';
 import Tooltip from '@mui/material/Tooltip';
 
 const Timer = ({ event, color }) => {
-  console.log(event);
-
   return (
     <div className={`timer-container timer-${color}`}>
       <h4 className='timer-label'>{event ? event.title : 'Loading...'}</h4>

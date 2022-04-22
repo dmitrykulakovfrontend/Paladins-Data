@@ -9,13 +9,13 @@ import { calculateTimeLeft } from '../helpers';
 import { v4 as uuid4 } from 'uuid';
 
 const Asidecontent = ({ width, closeMenu }) => {
-  const [timeEvents, setTimeEvents] = useState([]);
+  const [ timeEvents, setTimeEvents ] = useState([]);
   const { loading, error, data } = useQuery(GET_EVENTS);
 
   const isActiveLink = ({ isActive }) =>
     isActive ? 'entry-link active-link' : 'entry-link';
 
-  useEffect(() => data && setTimeEvents(data.getAllEvents), [data]);
+  useEffect(() => data && setTimeEvents(data.getAllEvents), [ data ]);
 
   useEffect(() => {
     if (!timeEvents) return;
@@ -34,7 +34,7 @@ const Asidecontent = ({ width, closeMenu }) => {
     return () => {
       clearTimeout(timer);
     };
-  }, [timeEvents]);
+  }, [ timeEvents ]);
 
   return (
     <>

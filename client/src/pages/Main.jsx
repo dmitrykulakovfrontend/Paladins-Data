@@ -1,86 +1,76 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable operator-linebreak */
-import { useState, useEffect, useRef } from 'react';
-import { HiChevronDoubleRight } from 'react-icons/hi';
+import { useState, useEffect, useRef, Fragment } from 'react';
 import { BsInfoCircleFill } from 'react-icons/bs';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { HashLink as Link } from 'react-router-hash-link';
 import { useLazyQuery } from '@apollo/client';
 import { GET_PLAYER } from '../query/player';
+import { GET_CHAMPIONS_ROLES } from '../query/champions';
 import { combineQueues, makeOverallStats } from '../helpers.js';
 import { Helmet } from 'react-helmet-async';
 import Tooltip from '@mui/material/Tooltip';
 import FAQ from '../components/FAQ';
 import CompareView from './CompareView';
+import SearchPlayerView from './SearchPlayerView';
 
 import HelpIcon from '@mui/icons-material/Help';
 import IconButton from '@mui/material/IconButton';
-import CircularProgress from '@mui/material/CircularProgress';
 
 const Main = ({ comparing }) => {
-  const [state, setState] = useState({
+  const [ state, setState ] = useState({
     isPlayerNotFound: false,
-    input: '',
-    tooltipOpen: false,
+    isTooltipOpen: false,
     isSearchingPlayer: false,
-    playerData: {},
     isAnimating: false,
-    isComparing: false,
   });
+
+  const [ showComparing, setShowComparing ] = useState(false);
+  const [ player, setPlayer ] = useState({});
+  const [ input, setInput ] = useState('');
   let navigate = useNavigate();
   const location = useLocation();
 
-  const [getPlayer, { loading, error, data, refetch }] = useLazyQuery(
+
+  const [ getPlayer, { loading: playerLoading, error: playerError, data: playerData, refetch } ] = useLazyQuery(
     GET_PLAYER,
     { errorPolicy: 'all' },
   );
+  const [ getRoles, { loading: RolesLoading, error: RolesError, data: RolesData } ] = useLazyQuery(GET_CHAMPIONS_ROLES);
+
+  const scrollInto = (target) => {
+    if (!target) return;
+    document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
+  };
 
   useEffect(() => {
-    if (comparing === true) {
-      setState({
-        ...state,
-        isComparing: true,
-      });
-    } else if (comparing === false) {
-      setState({
-        ...state,
-        isComparing: false,
-      });
-    }
+    comparing ? setShowComparing(true) : setShowComparing(false);
 
-    if (location.hash === '#faq') {
-      const faq = document
-        .querySelector('#faq')
-        .scrollIntoView({ behavior: 'smooth' });
-    }
-
-    if (location.hash === '#playersearch') {
-      const playersearch = document
-        .querySelector('#playersearch')
-        .scrollIntoView({ behavior: 'smooth' });
-    }
-
-    if (location.pathname === '/compare') {
-      const playersearch = document
-        .querySelector('#playersearch')
-        .scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [location]);
+    location.pathname === '/compare'
+      ? scrollInto('#playersearch')
+      : scrollInto(location.hash);
+  }, [ location ]);
 
   const switchComparing = () => {
     setState({
       ...state,
       isPlayerNotFound: false,
       isSearchingPlayer: false,
-      isComparing: !state.isComparing,
     });
+    setShowComparing(!showComparing);
   };
 
   const searchPlayer = async () => {
-    const player = await getPlayer({
-      variables: { hz_player_name: state.input.trim() },
-    });
-    if (player.error || player.data.getPlayer === null) {
+
+    const data = await Promise.all([ getPlayer({
+      variables: { hz_player_name: input },
+    }), getRoles() ])
+
+    const playerData = data[ 0 ].data.getPlayer;
+    const rolesList = data[ 1 ].data.getChampionsInfo;
+
+
+    if (player.error || player === null) {
       setState({
         ...state,
         isPlayerNotFound: true,
@@ -89,8 +79,8 @@ const Main = ({ comparing }) => {
       player.error && console.log(player.error);
       return;
     }
-    const playerData = player.data.getPlayer;
-    const queues = combineQueues(
+
+    const queues = combineQueues(rolesList,
       playerData.Competitive,
       playerData.Siege,
       playerData.TDM,
@@ -98,10 +88,10 @@ const Main = ({ comparing }) => {
     );
 
     const casual = makeOverallStats(
-      combineQueues(playerData.Siege, playerData.TDM, playerData.Onslaught),
+      combineQueues(rolesList, playerData.Siege, playerData.TDM, playerData.Onslaught),
     );
 
-    const ranked = makeOverallStats(combineQueues(playerData.Competitive));
+    const ranked = makeOverallStats(combineQueues(rolesList, playerData.Competitive));
 
     const overall = makeOverallStats(queues);
 
@@ -121,39 +111,39 @@ const Main = ({ comparing }) => {
     });
   };
 
-  const handleClick = (e) => {
-    if (state.input.trim().length <= 2) {
+  const handleClick = () => {
+    if (input.length <= 2) {
       setState({
         ...state,
-        tooltipOpen: true,
-      });
+        isTooltipOpen: true,
+      })
+
+      setTimeout(() => {
+        setState({
+          ...state,
+          isTooltipOpen: false,
+        });
+      }, 750)
       return;
     }
+
     setState({
       ...state,
       isPlayerNotFound: false,
       isSearchingPlayer: true,
     });
+
     searchPlayer();
+  };
+
+  const handleChange = (e) => {
+    setInput(e.target.value.trim());
   };
 
   const handleKeyPress = (e) => {
     if (e.code !== 'Enter') return false;
 
-    if (state.input.trim().length <= 2) {
-      e.preventDefault();
-      setState({
-        ...state,
-        tooltipOpen: true,
-      });
-      return;
-    }
-    setState({
-      ...state,
-      isPlayerNotFound: false,
-      isSearchingPlayer: true,
-    });
-    searchPlayer();
+    handleClick();
   };
 
   return (
@@ -175,7 +165,7 @@ const Main = ({ comparing }) => {
         <div className='player-search-background'>
           <div className='animation-container'>
             {state.isPlayerNotFound && (
-              <>
+              <Fragment>
                 <div className='error-text'>
                   Profile hidden or not found.
                   <Tooltip
@@ -196,88 +186,28 @@ const Main = ({ comparing }) => {
                   </Tooltip>
                 </div>
                 <div className='line-crimson'></div>
-              </>
+              </Fragment>
             )}
-            {state.isComparing ? (
+            {showComparing ? (
               <CompareView switchComparing={switchComparing} />
             ) : (
-              <>
-                <div className='search-container'>
-                  <div
-                    onKeyDown={
-                      state.isSearchingPlayer ? undefined : handleKeyPress
-                    }
-                    className={
-                      state.isPlayerNotFound
-                        ? 'search-bar standalone error'
-                        : 'search-bar standalone'
-                    }
-                  >
-                    <Tooltip
-                      componentsProps={{
-                        tooltip: {
-                          sx: {
-                            color: '#ccc',
-                            backgroundColor: '#363636',
-                            fontSize: '12px',
-                            padding: '0.5em',
-                          },
-                        },
-                      }}
-                      PopperProps={{
-                        disablePortal: true,
-                      }}
-                      onClose={() => setState({ ...state, tooltipOpen: false })}
-                      open={state.tooltipOpen}
-                      disableFocusListener
-                      disableHoverListener
-                      disableTouchListener
-                      title='Invalid input.'
-                      placement='left'
-                    >
-                      <input
-                        type='text'
-                        name='playerinfo'
-                        placeholder='Enter Username or Match ID'
-                        value={state.input}
-                        onChange={(e) =>
-                          setState({
-                            ...state,
-                            input: e.target.value,
-                          })
-                        }
-                      />
-                    </Tooltip>
-                    <button
-                      aria-label='Search'
-                      type='button'
-                      onClick={
-                        state.isSearchingPlayer ? undefined : handleClick
-                      }
-                    >
-                      {state.isSearchingPlayer ? (
-                        <CircularProgress color={`info`} size={25} />
-                      ) : (
-                        <HiChevronDoubleRight style={{ fontSize: '30px' }} />
-                      )}
-                    </button>
-                  </div>
-                </div>
-                <div className='separator-word'>
-                  <div className='line-crimson-right'></div>
-                  <span></span>
-                  <div className='line-crimson-left'></div>
-                </div>
-                <button className='light-button' onClick={switchComparing}>
-                  compare with others
-                </button>
-              </>
+              <SearchPlayerView
+                handleKeyPress={handleKeyPress}
+                handleClick={handleClick}
+                handleChange={handleChange}
+                switchComparing={switchComparing}
+                input={input}
+                isSearchingPlayer={state.isSearchingPlayer}
+                isPlayerNotFound={state.isPlayerNotFound}
+                isTooltipOpen={state.isTooltipOpen}
+              />
             )}
             <div className='info-container'>
               <span>
                 <BsInfoCircleFill style={{ fontSize: '15px' }} /> The profile
-                must be{' '}
+                must be
                 <Link className='link' to='#faq'>
+                  {' '}
                   public
                 </Link>
                 .

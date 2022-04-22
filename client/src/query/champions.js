@@ -57,3 +57,11 @@ export const GET_CHAMPIONS = gql`
     }
   }
 `;
+export const GET_CHAMPIONS_ROLES = gql`
+  query GetChampionsRoles {
+    getChampionsInfo {
+      Name_English
+      Roles
+    }
+  }
+`;

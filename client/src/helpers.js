@@ -1,61 +1,5 @@
 import _ from 'lodash';
 
-const championsType = {
-  Ash: 'Front Line',
-  Atlas: 'Front Line',
-  Azaan: 'Front Line',
-  Barik: 'Front Line',
-  Fernando: 'Front Line',
-  Inara: 'Front Line',
-  Khan: 'Front Line',
-  Makoa: 'Front Line',
-  Raum: 'Front Line',
-  Ruckus: 'Front Line',
-  Terminus: 'Front Line',
-  Torvald: 'Front Line',
-  Yagorath: 'Front Line',
-  'Bomb King': 'Damage',
-  Cassie: 'Damage',
-  Dredge: 'Damage',
-  Drogoz: 'Damage',
-  Imani: 'Damage',
-  Kinessa: 'Damage',
-  Lian: 'Damage',
-  Octavia: 'Damage',
-  Saati: 'Damage',
-  'Sha Lin': 'Damage',
-  Strix: 'Damage',
-  Tiberius: 'Damage',
-  Tyra: 'Damage',
-  Viktor: 'Damage',
-  Vivian: 'Damage',
-  Willo: 'Damage',
-  Corvus: 'Support',
-  Furia: 'Support',
-  Grohk: 'Support',
-  Grover: 'Support',
-  Io: 'Support',
-  Jenos: 'Support',
-  "Mal'Damba": 'Support',
-  Pip: 'Support',
-  Rei: 'Support',
-  Seris: 'Support',
-  Ying: 'Support',
-  Androxus: 'Flank',
-  Buck: 'Flank',
-  Evie: 'Flank',
-  Koga: 'Flank',
-  Lex: 'Flank',
-  Maeve: 'Flank',
-  Moji: 'Flank',
-  Skye: 'Flank',
-  Talus: 'Flank',
-  VII: 'Flank',
-  Vatu: 'Flank',
-  Vora: 'Flank',
-  Zhin: 'Flank',
-};
-
 export const calculateTimeLeft = (date) => {
   const difference = +new Date(date) - +new Date();
 
@@ -82,7 +26,7 @@ export const calculateTimeLeft = (date) => {
   return timeLeft;
 };
 
-export const combineQueues = (...queues) => {
+export const combineQueues = (rolesList, ...queues) => {
   const arr = [];
 
   for (let i = 0; i < queues.length; i++) {
@@ -144,7 +88,19 @@ export const combineQueues = (...queues) => {
       (champion.Kills + 0.5 * champion.Assists) /
       champion.Deaths
     ).toFixed(2);
-    champion.type = championsType[champion.Champion];
+
+      const role = rolesList.find(champ => champ.Name_English === champion.Champion).Roles;
+
+    switch (role) {
+      case 'Paladins Flanker':
+        champion.Role = 'Flank';
+        break;
+      case 'Paladins Front Line':
+        champion.Role = 'Front Line';
+        break;
+      default:
+        champion.Role = role.split(' ')[1];
+    }
     finalResults.push(champion);
   });
   return finalResults;

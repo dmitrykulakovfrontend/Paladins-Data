@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import  { useState, useEffect, useRef, Fragment } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
@@ -98,9 +98,9 @@ const CompareView = ({ switchComparing }) => {
   };
 
   return (
-    <>
+    <Fragment>
       {state.playersNotFound && (
-        <>
+        <Fragment>
           <div className='error-text'>
             Profile hidden or not found.
             <Tooltip
@@ -121,7 +121,7 @@ const CompareView = ({ switchComparing }) => {
             </Tooltip>
           </div>
           <div className='line-crimson'></div>
-        </>
+        </Fragment>
       )}
       <div className='compare-form-container'>
         <form className='search-container' id='compare-form'>
@@ -200,7 +200,7 @@ const CompareView = ({ switchComparing }) => {
           </button>
         </div>
       </div>
-    </>
+    </Fragment>
   );
 };
 
