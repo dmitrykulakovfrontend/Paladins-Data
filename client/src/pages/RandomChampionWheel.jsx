@@ -8,39 +8,7 @@ import { Helmet } from 'react-helmet-async';
 
 const RandomChampionWheel = ({ width }) => {
   const [ wheel, setWheel ] = useState({});
-  const [ filteredWheel, setFilteredWheel ] = useState({});
   const { loading, error, data } = useQuery(GET_ICONS);
-
-  const filterChampions = (Role) => {
-    switch (Role) {
-      case 'damages':
-        setFilteredWheel(
-          wheel.filter((champion) => champion.Roles === 'Paladins Damage'),
-        );
-        break;
-      case 'supports':
-        setFilteredWheel(
-          Object.assign({}, wheel.filter((champion) => champion.Roles === 'Paladins Support')),
-        );
-        console.log(filteredWheel);
-        break;
-      case 'tanks':
-        setFilteredWheel(
-          Object.assign({}, wheel.filter(
-            (champion) => champion.Roles === 'Paladins Front Line',
-          )),
-        );
-        break;
-      case 'flanks':
-        setFilteredWheel(
-          wheel.filter((champion) => champion.Roles === 'Paladins Flanker'),
-        );
-        break;
-      default:
-        setFilteredWheel(wheel);
-        break;
-    }
-  };
 
   const displayResult = (spinResult) => {
     return <img src={`${spinResult}`} alt={'result'} />;
@@ -54,11 +22,9 @@ const RandomChampionWheel = ({ width }) => {
       wheelOptions[ i + 1 ] = {
         image: icons[ i ].ChampionIcon_URL,
         result: icons[ i ].ChampionIcon_URL,
-        Roles: icons[ i ].Roles
       };
     }
     setWheel(wheelOptions);
-    setFilteredWheel(wheelOptions);
   }, [ data ]);
 
   if (Object.entries(wheel).length !== 0) {
@@ -86,46 +52,11 @@ const RandomChampionWheel = ({ width }) => {
           />
         </Helmet>
         <SpinningWheel
-          sources={filteredWheel}
+          sources={wheel}
           displayResult={displayResult}
           width={width}
           outerRingColor={'crimson'}
         />
-        <div>
-          <div className='class-buttons' style={{
-            margin: '30px 0 0 0',
-          }}>
-            <button
-              className='light-button class-button'
-              onClick={() => filterChampions('damages')}
-            >
-              Damage
-            </button>
-            <button
-              className='light-button class-button'
-              onClick={() => filterChampions('flanks')}
-            >
-              Flank
-            </button>
-            <button
-              className='light-button class-button'
-              onClick={() => filterChampions('tanks')}
-            >
-              Front Line
-            </button>
-            <button
-              className='light-button class-button'
-              onClick={() => filterChampions('supports')}
-            >
-              Support
-            </button>
-            <MdRestartAlt
-              onClick={() => filterChampions('default')}
-              style={{ color: '#888', fontSize: '25px', textAlign: 'center' }}
-            />
-          </div>
-
-        </div>
       </div>
     );
   } else {

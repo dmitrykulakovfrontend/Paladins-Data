@@ -11,7 +11,6 @@ import CardStatContent from './CardStatContent';
 
 const ProfileStatsContainer = ({ width, player }) => {
   const [ inGame, setInGame ] = useState('');
-  console.log(player);
 
   useEffect(() => {
     switch (player.playerData.Status) {
@@ -31,7 +30,6 @@ const ProfileStatsContainer = ({ width, player }) => {
         setInGame('Offline');
         break;
     }
-    console.log(inGame);
   }, [ player ]);
 
   const normalise = (value, MIN, MAX) => ((value - MIN) * 100) / (MAX - MIN);

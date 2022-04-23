@@ -58,7 +58,6 @@ const CompareView = ({ switchComparing }) => {
       })
     ]);
 
-    console.log(answer);
 
     const rolesList = answer[ 0 ].data.getChampionsInfo;
     const player1 = answer[ 1 ];
