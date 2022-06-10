@@ -1,7 +1,7 @@
 # Paladins Data
 > This site is made to look at player statistics and compare players. Also, there is a random champion wheel, just to make games funnier.
 
-Should be available at [Heroku](https://paladinsdata.herokuapp.com/players#playersearch)
+Should be available at [Heroku](https://paladinsdata.herokuapp.com/players#playersearch) (You can have long loading first time because of free hosting)
 
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Apollo-GraphQL](https://img.shields.io/badge/-ApolloGraphQL-311C87?style=for-the-badge&logo=apollo-graphql)
