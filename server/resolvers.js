@@ -80,7 +80,7 @@ const getPlayerResolver = async (parent, args, context, info) => {
 
   // Comparing is 30 minutes gone, if no just return player else update data
   if (new Date() - new Date(Last_Update) <= 30 * 60 * 1000) {
-    console.log("nope");
+    // console.log("nope");
     return player;
   }
 
@@ -261,7 +261,6 @@ const resolvers = {
     getPlayer: getPlayerResolver,
     getAllEvents: async () => {
       const events = await Events.find();
-      // console.log(events);
       events.forEach((event) => {
         if (+new Date(event.ends) - +new Date() <= 0) {
           // console.log("updating...");
@@ -271,10 +270,8 @@ const resolvers = {
           event.isUpdated = true;
         }
       });
-      // console.log(events);
       events.forEach(async (event) => {
         if (event.isUpdated) {
-          // and here too
           event = await Events.findOneAndUpdate(
             { title: event.title },
             { title: event.title, ends: event.ends, repeats: event.repeats },

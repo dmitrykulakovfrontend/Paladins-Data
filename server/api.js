@@ -1,8 +1,8 @@
 const { API } = require("pe-paladins.js");
 
 const api = new API({
-  devId: "4200",
-  authKey: "2D45F3CCE08B4E4986536D88F2D18934",
+  devId: process.env.DEV_ID,
+  authKey: process.env.AUTH_KEY,
   languageId: 1,
 }); // API loaded and ready to go.
 

@@ -14,7 +14,6 @@ require("dotenv").config();
 
 const typeDefs = require("./typeDefs");
 const resolvers = require("./resolvers");
-console.log(process.env.DB_USERNAME);
 
 mongoose.connect(
   `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.esoz4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
@@ -32,7 +31,6 @@ async function startServer() {
 }
 startServer();
 
-// api.getChampionsInfo();
 
 // Using static files and cors
 app.use(express.static(path.resolve(__dirname, "..", "client", "build")));
@@ -73,8 +71,8 @@ app.get("/onlinePlayers", async (request, response) => {
 // route for graphql because without this it trying to redirect in client and causing
 // 401 not found error :(
 app.get("/graphql", (req, res) => {
-  res.redirect(`https://paladinsdata.herokuapp.com/graphql`);
-  // res.redirect("https://studio.apollographql.com/sandbox/explorer");
+  // res.redirect(`https://paladinsdata.herokuapp.com/graphql`);
+  res.redirect("https://studio.apollographql.com/sandbox/explorer");
 });
 
 // All other requests will return react app
