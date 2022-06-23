@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SpinningWheel } from './Wheel/displaycomponent';
+import { SpinningWheel } from './Wheel/DisplayComponent';
 import { useQuery } from '@apollo/client';
 import { GET_ICONS } from '../query/champions';
 import CircularProgress from '@mui/material/CircularProgress';
