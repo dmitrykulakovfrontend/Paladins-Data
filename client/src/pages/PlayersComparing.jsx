@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 
 import MuiTable from '../components/MuiTable';
-import { rankedTiers } from '../constants';
+import { rankedTiers } from '../constants.js';
 import {
   countBestKDA,
   countBestWinrate,
