@@ -1,4 +1,4 @@
-import { rankedTiers } from './../constants';
+import { rankedTiers } from '../constants.js';
 
 import { useState, useEffect } from 'react';
 import MuiTable from '../components/MuiTable';
