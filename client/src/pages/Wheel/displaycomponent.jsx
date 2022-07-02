@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import './displayComponentStyle.css';
-import Wedges from './wedges/CreateWedges.jsx';
+import Wedges from './wedges/createWedges.jsx';
 
 class SpinningWheel extends React.Component {
   constructor(props) {
