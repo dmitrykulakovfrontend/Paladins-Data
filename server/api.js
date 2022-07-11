@@ -1,4 +1,5 @@
 const { API } = require("pe-paladins.js");
+require("dotenv").config();
 
 const api = new API({
   devId: process.env.DEV_ID,
