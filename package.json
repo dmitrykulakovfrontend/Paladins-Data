@@ -29,6 +29,7 @@
     "jsdom": "^19.0.0",
     "md5": "^2.3.0",
     "mongoose": "^6.2.1",
+    "nodemon": "^2.0.20",
     "pe-paladins.js": "^3.2.5"
   },
   "devDependencies": {
