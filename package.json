@@ -19,6 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@apollo/server": "^4.3.0",
     "@vercel/node": "^2.8.0",
     "apollo-server-express": "^3.6.3",
     "concurrently": "^7.0.0",
