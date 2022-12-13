@@ -1,5 +1,4 @@
 import { ApolloServer } from "@apollo/server";
-import { getConnection } from "../src/database";
 
 import typeDefs from "../server/typeDefs";
 import resolvers from "../server/resolvers";
