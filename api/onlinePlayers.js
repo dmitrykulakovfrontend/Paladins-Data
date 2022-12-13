@@ -23,7 +23,7 @@ export default async function onlinePlayers(req, res) {
 
   const dom = new JSDOM(data);
 
-  response.json(
+  res.json(
     dom.window.document.querySelectorAll("#app-heading .app-stat .num")[0]
       .innerHTML
   );
