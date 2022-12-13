@@ -11,7 +11,7 @@ const Header = ({ width }) => {
   const [players, setPlayers] = useState('Fetching...');
 
   useEffect(() => {
-    fetch(`/onlinePlayers`).then((response) => {
+    fetch(`/api/onlinePlayers`).then((response) => {
       response.json().then((data) => {
         setPlayers(data);
       });
