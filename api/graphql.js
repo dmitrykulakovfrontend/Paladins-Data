@@ -1,4 +1,4 @@
-import { ApolloServer } from "@apollo/server";
+import { ApolloServer } from "apollo-server-micro";
 
 import typeDefs from "../server/typeDefs";
 import resolvers from "../server/resolvers";

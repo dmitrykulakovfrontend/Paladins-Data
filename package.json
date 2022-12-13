@@ -19,9 +19,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@apollo/server": "^4.3.0",
     "@vercel/node": "^2.8.0",
     "apollo-server-express": "^3.6.3",
+    "apollo-server-micro": "^3.11.1",
     "concurrently": "^7.0.0",
     "cors": "^2.8.5",
     "datejs": "^1.0.0-rc3",
