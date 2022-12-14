@@ -3,31 +3,24 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
-  "engines": {
-    "node": "14.18.2",
-    "npm": "6.14.15"
-  },
   "scripts": {
     "client-install": "npm install --prefix client",
     "start": "node server/server.js",
     "server": "nodemon server/server.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "NPM_CONFIG_PRODUCTION=true npm install --prefix client && npm run build --prefix client"
+    "build": "NPM_CONFIG_PRODUCTION=true npm install --prefix client && echo 'add npm run build --prefix client' "
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@saeris/apollo-server-vercel": "^1.0.1",
     "@vercel/node": "^2.8.0",
-    "apollo-server-express": "^3.6.3",
-    "apollo-server-micro": "^3.11.1",
+    "apollo-server": "^3.11.1",
     "concurrently": "^7.0.0",
-    "cors": "^2.8.5",
     "datejs": "^1.0.0-rc3",
     "dotenv": "^16.0.0",
-    "express": "^4.17.2",
-    "graphql": "^16.3.0",
+    "graphql": "15.8.0",
     "jsdom": "^19.0.0",
     "md5": "^2.3.0",
     "mongoose": "^6.2.1",

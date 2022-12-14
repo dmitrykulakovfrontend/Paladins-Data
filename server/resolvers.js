@@ -119,7 +119,7 @@ const getPlayerResolver = async (parent, args, context, info) => {
 
   // Updating Player and returning back
   await Player.findOneAndUpdate(
-    { $regex: new RegExp(`^${hz_player_name}$`, "i") },
+    { hz_player_name: { $regex: `^${hz_player_name}$`, $options: "i" } },
     {
       ActivePlayerId,
       AvatarURL,
