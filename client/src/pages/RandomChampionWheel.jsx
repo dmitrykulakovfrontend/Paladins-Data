@@ -7,7 +7,7 @@ import { MdRestartAlt } from 'react-icons/md';
 import { Helmet } from 'react-helmet-async';
 
 const RandomChampionWheel = ({ width }) => {
-  const [wheel, setWheel] = useState([]);
+  const [wheel, setWheel] = useState({});
   const { loading, error, data } = useQuery(GET_ICONS);
   const displayResult = (spinResult) => {
     return <img src={`${spinResult}`} alt={'result'} />;
@@ -19,9 +19,10 @@ const RandomChampionWheel = ({ width }) => {
 
   useEffect(() => {
     if (!data) return;
+    console.log('initial', data);
     setChampions(data.getChampionsInfo);
     setFilteredChampions(data.getChampionsInfo);
-  }, []);
+  }, [data]);
 
   const filterChampions = (Role) => {
     switch (Role) {
@@ -62,6 +63,7 @@ const RandomChampionWheel = ({ width }) => {
 
   useEffect(() => {
     if (!data) return;
+    console.log('initial wheel', data);
     const wheelOptions = [];
     const icons = filteredChampions;
     for (let i = 0; i < icons.length; i++) {
@@ -70,11 +72,11 @@ const RandomChampionWheel = ({ width }) => {
         result: icons[i].ChampionIcon_URL,
       };
     }
-    console.log({ wheelOptions, icons });
+    console.log({ wheelOptions, icons, filteredChampions });
     setWheel(wheelOptions);
-  }, [sortType]);
+  }, [sortType, data, filteredChampions]);
 
-  if (wheel.length !== 0) {
+  if (Object.entries(wheel).length !== 0) {
     return (
       <div
         className='main-content-container-bg'
