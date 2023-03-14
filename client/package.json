@@ -2,7 +2,6 @@
   "name": "paladinsdata",
   "version": "1.0.0",
   "private": true,
-  "proxy": "http://localhost:3001",
   "dependencies": {
     "@apollo/client": "^3.5.8",
     "@emotion/react": "^11.8.1",
@@ -11,8 +10,6 @@
     "@mui/material": "^5.4.1",
     "graphql": "15.8.0",
     "lodash": "^4.17.21",
-    "node-sass": "^7.0.1",
-    "npm": "^8.5.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet-async": "^1.2.3",
@@ -28,7 +25,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "scss:watch": "sass --watch scss:public/styles",
+    "scss": "sass scss:public/styles"
   },
   "browserslist": {
     "production": [

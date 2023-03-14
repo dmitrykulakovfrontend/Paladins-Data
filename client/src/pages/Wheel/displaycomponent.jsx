@@ -110,39 +110,38 @@ class SpinningWheel extends React.Component {
     });
   }
 
-  // resetWheel() {
-  //   this.setState({
-  //     numberOfSources: this.props.numberOfSources,
-  //     spinBy: 0,
-  //     resultLocation: 0,
-  //     displayResult: false,
-  //     updateWheel: false,
-  //     setToZero: true,
-  //     result: null,
-  //     loadInResult: false,
-  //     spinning: false,
-  //     firstSpin: true,
-  //     showWedges: this.props.showWedges === false ? false : true
-  //   });
-  // }
+  resetWheel() {
+    this.setState({
+      numberOfSources: this.props.numberOfSources,
+      spinBy: 0,
+      resultLocation: 0,
+      displayResult: false,
+      updateWheel: false,
+      setToZero: true,
+      result: null,
+      loadInResult: false,
+      spinning: false,
+      firstSpin: true,
+      showWedges: this.props.showWedges === false ? false : true,
+    });
+  }
 
   componentDidUpdate(prevProps, prevState) {
-    // if (prevProps.numberOfSources !== this.props.numberOfSources) {
-    //   this.resetWheel();
-    // } else if (prevState.numberOfSources !== this.state.numberOfSources) {
-    //   this.getWedges();
-    // } else if (prevProps.sources !== this.props.sources) {
-    //   this.setState({ sources: this.props.sources });
-    // } else if (prevState.sources !== this.state.sources) {
-    //   this.setWedges(this.state.sources);
-    // } else if (prevProps.durationOfSpin !== this.props.durationOfSpin) {
-    //   this.setState({ durationOfSpin: this.props.durationOfSpin || 5 });
-    // } else if (prevProps.fadeInTime !== this.props.fadeInTime) {
-    //   this.setState({ fadeInTime: this.props.fadeInTime || 1 });
-    // } else if (prevProps.showWedges !== this.props.showWedges) {
-    //   this.resetWheel();
-    // } else
-    if (
+    if (prevProps.numberOfSources !== this.props.numberOfSources) {
+      this.resetWheel();
+    } else if (prevState.numberOfSources !== this.state.numberOfSources) {
+      this.getWedges();
+    } else if (prevProps.sources !== this.props.sources) {
+      this.setState({ sources: this.props.sources });
+    } else if (prevState.sources !== this.state.sources) {
+      this.setWedges(this.state.sources);
+    } else if (prevProps.durationOfSpin !== this.props.durationOfSpin) {
+      this.setState({ durationOfSpin: this.props.durationOfSpin || 5 });
+    } else if (prevProps.fadeInTime !== this.props.fadeInTime) {
+      this.setState({ fadeInTime: this.props.fadeInTime || 1 });
+    } else if (prevProps.showWedges !== this.props.showWedges) {
+      this.resetWheel();
+    } else if (
       !this.state.firstSpin &&
       !this.state.updateWheel &&
       prevState.result !== this.state.result
