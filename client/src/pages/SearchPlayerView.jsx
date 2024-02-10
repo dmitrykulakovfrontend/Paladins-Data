@@ -10,12 +10,31 @@ const SearchPlayerView = ({
   isPlayerNotFound,
   isTooltipOpen,
   input,
+  searchPlayer,
   switchComparing,
   handleChange,
 }) => {
   return (
     <Fragment>
       <div className='search-container'>
+        <h3>
+          Examples:{' '}
+          <button
+            onClick={() => {
+              searchPlayer('AtomEistee');
+            }}
+          >
+            AtomEistee
+          </button>
+          <button
+            onClick={() => {
+              searchPlayer('LastDragoon');
+            }}>LastDragoon</button>
+          <button
+            onClick={() => {
+              searchPlayer('KimoD');
+            }}>KimoD</button>
+        </h3>
         <div
           onKeyDown={isSearchingPlayer ? undefined : handleKeyPress}
           className={

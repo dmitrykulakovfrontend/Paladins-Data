@@ -59,10 +59,16 @@ const Main = ({ comparing }) => {
     setShowComparing(!showComparing);
   };
 
-  const searchPlayer = async () => {
+  const searchPlayer = async (name) => {
+
+    setState({
+      ...state,
+      isPlayerNotFound: false,
+      isSearchingPlayer: true,
+    });
 
     const data = await Promise.all([ getPlayer({
-      variables: { hz_player_name: input },
+      variables: { hz_player_name: name ? name : input },
     }), getRoles() ])
 
     const playerData = data[ 0 ].data.getPlayer;
@@ -125,12 +131,6 @@ const Main = ({ comparing }) => {
       }, 750)
       return;
     }
-
-    setState({
-      ...state,
-      isPlayerNotFound: false,
-      isSearchingPlayer: true,
-    });
 
     searchPlayer();
   };
@@ -196,6 +196,7 @@ const Main = ({ comparing }) => {
                 handleChange={handleChange}
                 switchComparing={switchComparing}
                 input={input}
+                searchPlayer={searchPlayer}
                 isSearchingPlayer={state.isSearchingPlayer}
                 isPlayerNotFound={state.isPlayerNotFound}
                 isTooltipOpen={state.isTooltipOpen}
